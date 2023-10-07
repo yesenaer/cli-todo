@@ -1,5 +1,8 @@
+from typer import Exit
 from typer.testing import CliRunner
-from todo import app
+from todo import app, check_if_files_exist
+from pathlib import Path
+from pytest import raises
 
 
 runner = CliRunner()
@@ -27,3 +30,30 @@ def test_add_default():
     result = runner.invoke(app, ['add', '5'])
     assert result.exit_code == 0
     assert result.stdout.strip() == '6'
+
+
+def test_check_if_files_exist():
+    filename = Path(__file__)
+    existing_paths = [filename]
+    result = check_if_files_exist(existing_paths)
+    assert result == existing_paths
+
+
+def test_check_if_files_exist_failure():
+    with raises(Exit):
+        filename = Path('nonexistingfile')
+        check_if_files_exist([filename])
+
+
+def test_word_count():
+    test_file = str((Path(__file__).resolve().parent / 'resources/test.txt'))
+    result = runner.invoke(app, ['word-count', test_file])
+    assert result.exit_code == 0
+    assert 'In total there are 4 words in' in result.stdout.strip()
+
+
+def test_word_count_failure():
+    test_file = str(Path('nonexistingfile'))
+    result = runner.invoke(app, ['word-count', test_file])
+    assert result.exit_code == 1
+    assert result.stdout.strip() == "The path you've supplied nonexistingfile does not exist."
