@@ -1,0 +1,35 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "cli-todo"
+version = "0.0.1"
+description = "CLI tool to track to-do lists and items."
+readme = "README.md"
+requires-python = ">=3.10"
+keywords = ["cli-todo", "productivity"]
+authors = [
+    {email = "meervoud.globes-0r@icloud.com"},
+    {name = "yesenaer"}
+]
+classifiers = [
+  "Programming Language :: Python"
+]
+dependencies = ["typer"]
+
+[project.optional-dependencies]
+test = [
+  "pytest",
+  "pytest-cov[all]"
+]
+
+[project.urls]
+repository = "https://github.com/yesenaer/cli-todo"
+
+[options]
+python_requires = ">=3.10"
+
+[tool.pytest.ini_options]
+minversion = 7.0
+pythonpath = "todo"
