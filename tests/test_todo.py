@@ -1,6 +1,6 @@
 from typer import Exit
 from typer.testing import CliRunner
-from todo import app, check_if_files_exist
+from todo.todo import app, check_if_files_exist
 from pathlib import Path
 from pytest import raises
 
@@ -61,14 +61,17 @@ def test_word_count_failure():
 
 def test_talk():
     result = runner.invoke(app, ["talk", "hello world", "--repeat", "2", "--loud"])
+    assert result.exit_code == 0
     assert result.stdout.strip() == "HELLO WORLD\nHELLO WORLD" 
 
 
 def test_talk_defaults():
     result = runner.invoke(app, ["talk", "hello world"])
+    assert result.exit_code == 0
     assert result.stdout.strip() == "hello world" 
 
 
 def test_db():
     result = runner.invoke(app, ["db", "create-db", "--table", "gwent"])
+    assert result.exit_code == 0
     assert result.stdout.strip() == "Creating table 'gwent' in database." 

@@ -12,3 +12,16 @@ CLI tool to track to-do lists and items.
 
 ## test
 - run `pytest .` from root of repo
+
+## build
+- run `pip install -e .` to make the cli tool available in your venv
+- run `pip install --upgrade build` and `py build` to create a distribution
+
+## run 
+with the cli tool available in venv
+- `cli-todo` for the whole cli app
+- `cli-db` for the db app
+
+## links
+[calmcode.io](https://calmcode.io/typer/introduction.html) -> shout out to calmcode.io for introducing me to typer.  <br>
+[typer website](https://typer.tiangolo.com/) for official docs on the typer framework.
