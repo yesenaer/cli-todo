@@ -1,5 +1,5 @@
 from pathlib import Path
-from typer import Typer, Argument, Exit
+from typer import Typer, Argument, Option, Exit
 
 
 # Typer object that will keep all cli options and other details
@@ -13,7 +13,7 @@ def hello_world(name: str):  # underscores ('_') in function names will be repla
     Args:
         name (str): your name!
     """
-    print(f'Hello {name}!')
+    print(f"Hello {name}!")
 
 
 @app.command()
@@ -23,12 +23,12 @@ def goodbye_world(name: str):
     Args:
         name (str): your name!
     """
-    print(f'Goodbye {name}!')
+    print(f"Goodbye {name}!")
 
 
 @app.command()
-def add(n1: int = Argument(..., help='An Integer'),  # typer has the elipse (...) as showing that it requires a value
-        n2: int = Argument(1, help='An Integer')):  # adding a value instead will allow for defaulting
+def add(n1: int = Argument(..., help="An Integer"),  # typer has the elipse (...) as showing that it requires a value
+        n2: int = Argument(1, help="An Integer")):  # adding a value instead will allow for defaulting
     """Adds two numbers.
 
     Args:
@@ -52,7 +52,7 @@ def check_if_files_exist(paths: list[Path]):
     """
     for path in paths:
         if not path.exists():
-            print(f'The path you\'ve supplied {path} does not exist.')
+            print(f"The path you\'ve supplied {path} does not exist.")
             raise Exit(code=1)
     return paths
 
@@ -66,9 +66,26 @@ def word_count(paths: list[Path] = Argument(..., help="List of files to count th
         paths (list[Path]): List of filepaths to to count the words in.
     """
     for path in paths:
-        texts = path.read_text().split('\n')
+        texts = path.read_text().split("\n")
         word_count = len([word for text in texts for word in text.split(" ")])
-        print(f'In total there are {word_count} words in {path}.')
+        print(f"In total there are {word_count} words in {path}.")
+
+
+@app.command()
+def talk(text: str = Argument(..., help="The text to type."),
+         repeat: int = Option(1, help="Number of times to repeat."),  # options are not mandatory, order does not matter
+         loud: bool = Option(False, is_flag=True)):  # adding is_flag means no value needs to be passed
+    """Talks back to you based on your specified text and options.
+
+    Args:
+        text (str): The text to type.
+        repeat (int, optional): Number of times to repeat. Defaults to 1.
+        loud (bool, optional): If text needs to be in caps. Defaults to False.
+    """
+    if loud: 
+        text = text.upper()
+    for _ in range(repeat):
+        print(text)
 
 
 if __name__ == "__main__":
