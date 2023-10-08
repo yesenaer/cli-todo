@@ -1,6 +1,7 @@
 from pathlib import Path
 from rich.console import Console
-from typer import Typer, Argument, Option, Exit
+from typer import Typer, Argument, Option, Exit, confirm
+from typing_extensions import Annotated  # to be able to let interpreter know how to treat values 
 
 
 # Rich Console object to allow for more console related features
@@ -30,8 +31,8 @@ def goodbye_world(name: str):
 
 
 @app.command()
-def add(n1: int = Argument(..., help="An Integer"),  # typer has the elipse (...) as showing that it requires a value
-        n2: int = Argument(1, help="An Integer")):  # adding a value instead will allow for defaulting
+def add(n1: Annotated[int, Argument(..., help="An Integer")],  # typer has the elipse (...) showing that its required
+        n2: Annotated[int, Argument(..., help="An Integer")] = 1):  # adding a value instead will allow for defaulting
     """Adds two numbers.
 
     Args:
@@ -55,14 +56,14 @@ def check_if_files_exist(paths: list[Path]):
     """
     for path in paths:
         if not path.exists():
-            console.print(f"The path '{path}' that you supplied, does not exist.", style="red")
+            console.print(f"The path '{path}' that you supplied, does not exist.", style="red")  # rich style
             raise Exit(code=1)
     return paths
 
 
 @app.command()
-def word_count(paths: list[Path] = Argument(..., help="List of files to count the words in.", 
-                                            callback=check_if_files_exist)):
+def word_count(paths: Annotated[list[Path], Argument(..., help="List of files to count the words in.", 
+                                                     callback=check_if_files_exist)]):
     """Count words per file.
 
     Args:
@@ -75,9 +76,9 @@ def word_count(paths: list[Path] = Argument(..., help="List of files to count th
 
 
 @app.command()
-def talk(text: str = Argument(..., help="The text to type."),
-         repeat: int = Option(1, help="Number of times to repeat."),  # options are not mandatory, order does not matter
-         loud: bool = Option(False, is_flag=True)):  # adding is_flag means no value needs to be passed
+def talk(text: Annotated[str, Argument(..., help="The text to type.")],
+         repeat: Annotated[int, Option(..., help="Number of times to repeat.")] = 1,  # not mandatory, can be mixed
+         loud: Annotated[bool, Option(..., is_flag=True)] = False):  # adding is_flag means no value needs to be passed
     """Talks back to you based on your specified text and options.
 
     Args:
@@ -89,6 +90,26 @@ def talk(text: str = Argument(..., help="The text to type."),
         text = text.upper()
     for _ in range(repeat):
         console.print(text)
+
+
+@app.command()
+def create_db(table: str = Option(..., prompt="What is the name of the table?",  # prompting if not supplied
+                                  confirmation_prompt=True)):  # prompting again
+    """Allows for creation of a table in database.
+
+    Args:
+        table (str, optional): Name of table that needs to be created. Prompts if not given.
+    """
+    console.print(f"Creating table '{table}' in database.", style="green")
+
+
+@app.command()
+def delete_db(table: str = Option(..., prompt="What is the name of the table?", confirmation_prompt=True)):
+    sure = confirm("Are you really really sure?")  # typer confirm will ask a y/N confirmation
+    if sure:
+        console.print(f"Deleting table '{table}' in database.", style="red")
+    else:
+        console.print("Back to safety!", style="green")
 
 
 if __name__ == "__main__":
