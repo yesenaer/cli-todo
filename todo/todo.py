@@ -2,12 +2,13 @@ from pathlib import Path
 from rich.console import Console
 from typer import Typer, Argument, Option, Exit, confirm
 from typing_extensions import Annotated  # to be able to let interpreter know how to treat values 
-
+from db import app as db_app
 
 # Rich Console object to allow for more console related features
 console = Console()
 # Typer object that will keep all cli options and other details
 app = Typer(name="TODO", add_completion=False, no_args_is_help=True, help="CLI TODO is here to help your productivity!")
+app.add_typer(db_app, name="db")  # adding submodule 
 
 
 @app.command()  # this app.command() will make the function available as cli
@@ -90,26 +91,6 @@ def talk(text: Annotated[str, Argument(..., help="The text to type.")],
         text = text.upper()
     for _ in range(repeat):
         console.print(text)
-
-
-@app.command()
-def create_db(table: str = Option(..., prompt="What is the name of the table?",  # prompting if not supplied
-                                  confirmation_prompt=True)):  # prompting again
-    """Allows for creation of a table in database.
-
-    Args:
-        table (str, optional): Name of table that needs to be created. Prompts if not given.
-    """
-    console.print(f"Creating table '{table}' in database.", style="green")
-
-
-@app.command()
-def delete_db(table: str = Option(..., prompt="What is the name of the table?", confirmation_prompt=True)):
-    sure = confirm("Are you really really sure?")  # typer confirm will ask a y/N confirmation
-    if sure:
-        console.print(f"Deleting table '{table}' in database.", style="red")
-    else:
-        console.print("Back to safety!", style="green")
 
 
 if __name__ == "__main__":
