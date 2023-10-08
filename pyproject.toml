@@ -16,7 +16,7 @@ authors = [
 classifiers = [
   "Programming Language :: Python"
 ]
-dependencies = ["typer"]
+dependencies = ["typer", "rich"]
 
 [project.optional-dependencies]
 test = [

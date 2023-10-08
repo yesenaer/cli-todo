@@ -1,7 +1,10 @@
 from pathlib import Path
+from rich.console import Console
 from typer import Typer, Argument, Option, Exit
 
 
+# Rich Console object to allow for more console related features
+console = Console()
 # Typer object that will keep all cli options and other details
 app = Typer(name="TODO", add_completion=False, no_args_is_help=True, help="CLI TODO is here to help your productivity!")
 
@@ -13,7 +16,7 @@ def hello_world(name: str):  # underscores ('_') in function names will be repla
     Args:
         name (str): your name!
     """
-    print(f"Hello {name}!")
+    console.print(f"Hello {name}!")
 
 
 @app.command()
@@ -23,7 +26,7 @@ def goodbye_world(name: str):
     Args:
         name (str): your name!
     """
-    print(f"Goodbye {name}!")
+    console.print(f"Goodbye {name}!")
 
 
 @app.command()
@@ -35,7 +38,7 @@ def add(n1: int = Argument(..., help="An Integer"),  # typer has the elipse (...
         n1 (int): first number.
         n2 (int): second number. defaults to 1.
     """
-    print(n1 + n2)
+    console.print(n1 + n2)
 
 
 def check_if_files_exist(paths: list[Path]):
@@ -52,7 +55,7 @@ def check_if_files_exist(paths: list[Path]):
     """
     for path in paths:
         if not path.exists():
-            print(f"The path you\'ve supplied {path} does not exist.")
+            console.print(f"The path '{path}' that you supplied, does not exist.", style="red")
             raise Exit(code=1)
     return paths
 
@@ -68,7 +71,7 @@ def word_count(paths: list[Path] = Argument(..., help="List of files to count th
     for path in paths:
         texts = path.read_text().split("\n")
         word_count = len([word for text in texts for word in text.split(" ")])
-        print(f"In total there are {word_count} words in {path}.")
+        console.print(f"In total there are {word_count} words in {path}.")
 
 
 @app.command()
@@ -85,7 +88,7 @@ def talk(text: str = Argument(..., help="The text to type."),
     if loud: 
         text = text.upper()
     for _ in range(repeat):
-        print(text)
+        console.print(text)
 
 
 if __name__ == "__main__":

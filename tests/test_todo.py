@@ -56,7 +56,7 @@ def test_word_count_failure():
     test_file = str(Path("nonexistingfile"))
     result = runner.invoke(app, ["word-count", test_file])
     assert result.exit_code == 1
-    assert result.stdout.strip() == "The path you've supplied nonexistingfile does not exist."
+    assert result.stdout.strip() == "The path 'nonexistingfile' that you supplied, does not exist."
 
 
 def test_talk():
