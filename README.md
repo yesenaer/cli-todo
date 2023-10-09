@@ -19,9 +19,10 @@ CLI tool to track to-do lists and items.
 
 ## run 
 with the cli tool available in venv
-- `cli-todo` for the whole cli app
+- `todo` for the todo cli app
+- `cli-example` for the example app build with calmcode.io (includes db submodule)
 - `cli-db` for the db app
 
 ## links
-[calmcode.io](https://calmcode.io/typer/introduction.html) -> shout out to calmcode.io for introducing me to typer.  <br>
+[calmcode.io](https://calmcode.io/typer/introduction.html) -> shout out to calmcode.io for introducing me to typer. <br>
 [typer website](https://typer.tiangolo.com/) for official docs on the typer framework.
