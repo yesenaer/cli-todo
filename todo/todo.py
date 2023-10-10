@@ -4,34 +4,15 @@ from typer import Typer, Argument, Option
 from typing_extensions import Annotated
 from yaml import safe_load, safe_dump
 from todo.example import app as example_app
+from todo.helper import create_file_if_not_exists
 
 
-DATA = Path(__file__).parent.resolve() / "data" / "data.yml"  # will be created if not already exists
-
+DATA = Path(__file__).parent.resolve() / "data" / "data.yml" 
+create_file_if_not_exists(path=DATA)  # creating here to allow for usage of both cli and main entry
 
 console = Console()
 app = Typer(name="todo", add_completion=False, no_args_is_help=True, help="TODO is here to help your productivity!")
 app.add_typer(example_app, name="example")  # see example and db modules for explanatory comments on typer
-
-
-def create_file_if_not_exists(path: Path) -> bool:
-    """Creates file if it does not yet exist.
-
-    Args:
-        path (pathlib.Path): Path to file.
-
-    Returns:
-        bool: if a file was created.
-    """
-    if not path.exists():
-        with open(path, "w") as w:
-            data = {"todo": []}
-            safe_dump(data, w, sort_keys=False)
-            return True
-    return False
-
-
-create_file_if_not_exists(path=DATA)  # creating here to allow for usage of both cli and main entry
 
 
 @app.command()
