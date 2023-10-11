@@ -5,13 +5,6 @@ from unittest.mock import patch
 from yaml import safe_load, safe_dump
 from todo.todo import app
 
-@fixture()
-def reset_data(test_file):
-    yield
-    with open(test_file, "w") as w:
-        data = {"todo": []}
-        safe_dump(data, w, sort_keys=False)
-
 
 def key_in_data(location: Path, key: str, value: Union[str, bool] = "item", list: str = "todo") -> bool:
     with open(location, "r") as f:

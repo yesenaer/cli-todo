@@ -2,9 +2,6 @@ from pathlib import Path
 from yaml import safe_load, safe_dump
 
 
-
-
-
 def create_file_if_not_exists(path: Path) -> bool:
     """Creates file if it does not yet exist.
 
