@@ -1,18 +1,16 @@
 from pathlib import Path
 from typing import Union
-from pytest import fixture
 from unittest.mock import patch
-from yaml import safe_load, safe_dump
 from todo.todo import app
+from todo.helper import load_data_from_file
 
 
 def key_in_data(location: Path, key: str, value: Union[str, bool] = "item", list: str = "todo") -> bool:
-    with open(location, "r") as f:
-        data = safe_load(f)
-        list = data.get(list)
-        for i in list:
-            if i.get(key) == value:
-                return True
+    data = load_data_from_file(location)
+    list = data.get(list)
+    for i in list:
+        if i.get(key) == value:
+            return True
     return False
 
 
@@ -22,7 +20,7 @@ def test_hello(runner):
     assert result.stdout.strip() == "Hello world!"
 
 
-def test_add(reset_data, test_file, runner):
+def test_add(test_file, runner):
     with patch("todo.todo.DATA", test_file):
         result = runner.invoke(app, ["add", "potions"])
         assert result.exit_code == 0
@@ -31,7 +29,7 @@ def test_add(reset_data, test_file, runner):
         assert key_in_data(test_file, "done", False)
 
 
-def test_add_list_option(reset_data, test_file, runner):
+def test_add_list_option(test_file, runner):
     with patch("todo.todo.DATA", test_file):
         result = runner.invoke(app, ["add", "swords", "--list", "weapons"])
         assert result.exit_code == 0
@@ -40,7 +38,7 @@ def test_add_list_option(reset_data, test_file, runner):
         assert key_in_data(test_file, "done", False, "weapons")
 
 
-def test_add_done_option(reset_data, test_file, runner):
+def test_add_done_option(test_file, runner):
     with patch("todo.todo.DATA", test_file):
         result = runner.invoke(app, ["add", "food", "--done"])
         assert result.exit_code == 0

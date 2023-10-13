@@ -18,7 +18,8 @@ def test_file(resource_dir):
 def runner():
     return CliRunner()
 
-@fixture()
+
+@fixture(autouse=True)
 def reset_data(test_file):
     yield
     with open(test_file, "w") as w:

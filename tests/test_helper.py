@@ -20,7 +20,7 @@ def test_load_data_from_file(test_file):
     assert data == {"todo": []}
 
 
-def test_write_data_to_file(test_file, reset_data):
+def test_write_data_to_file(test_file):
     data = {"other": "data"}
     write_data_to_file(data, test_file)
     result = load_data_from_file(test_file)
