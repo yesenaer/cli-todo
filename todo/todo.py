@@ -41,5 +41,39 @@ def add(item: Annotated[str, Argument(..., help="The todo item to add.")],
     console.print(f"Added {item} to your {list} list.")
 
 
+@app.command()
+def show(list: Annotated[str, Option(..., help="The list of interest.")] = "todo",
+         all: Annotated[bool, Option(..., is_flag=True)] = False):
+    """Shows items in list or shows items of all lists.
+
+    Args:
+        list (str): The name of list of interest. Defaults to "todo".
+        all (bool): Flag to have all lists shown. Defaults to False.
+    """
+    data = load_data_from_file(DATA)
+    if all:
+        for x in data:
+            show_list(x, data)
+            console.print()  
+    else:
+        if not data.get(list):
+            console.print(f"{list=} does not exist in data.")
+            return
+        show_list(list, data)
+
+
+def show_list(name: str, data: dict):
+    """Shows all items on list if list exists in data.
+
+    Args:
+        name (str): the name of the list.
+        data (dict): data that contains the list.
+    """
+    console.print(f"{name}:")
+    for item in data.get(name):
+        done = ['x' if item.get("done") else ' ']
+        console.print(f"{done[0]} | {item.get('item')}")
+
+
 if __name__ == "__main__":
     app()

@@ -45,3 +45,29 @@ def test_add_done_option(test_file, runner):
         assert result.stdout.strip() == "Added food to your todo list."
         assert key_in_data(test_file, "item", "food")
         assert key_in_data(test_file, "done", True)
+
+
+def test_show(test_file, runner):
+    with patch("todo.todo.DATA", test_file):
+        runner.invoke(app, ["add", "potions"])
+        runner.invoke(app, ["add", "swords", "--done"])
+        result = runner.invoke(app, ["show"])
+        assert result.exit_code == 0
+        output = result.stdout.split("\n")
+        assert output[0] == "todo:"
+        assert output[1] == "  | potions"
+        assert output[2] == "x | swords"
+
+
+def test_show_all(test_file, runner):
+    with patch("todo.todo.DATA", test_file):
+        runner.invoke(app, ["add", "potions"])
+        runner.invoke(app, ["add", "swords", "--done", "--list", "weapons"])
+        result = runner.invoke(app, ["show", "--all"])
+        assert result.exit_code == 0
+        output = result.stdout.split("\n")
+        assert output[0] == "todo:"
+        assert output[1] == "  | potions"
+        assert output[2] == ""
+        assert output[3] == "weapons:"
+        assert output[4] == "x | swords"
