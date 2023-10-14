@@ -23,6 +23,16 @@ with the cli tool available in venv
 - `cli-example` for the example app build with calmcode.io (includes db submodule)
 - `cli-db` for the db app
 
+### example
+```
+> todo add cheese
+> todo show
+todo:
+x | snacks
+  | bread
+  | cheese
+```
+
 ## links
 [calmcode.io](https://calmcode.io/typer/introduction.html) -> shout out to calmcode.io for introducing me to typer. <br>
 [typer website](https://typer.tiangolo.com/) for official docs on the typer framework.
