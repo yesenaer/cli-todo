@@ -23,7 +23,7 @@ with the cli tool available in venv
 - `cli-example` for the example app build with calmcode.io (includes db submodule)
 - `cli-db` for the db app
 
-### example
+### todo in action
 ```
 > todo add cheese
 > todo show
