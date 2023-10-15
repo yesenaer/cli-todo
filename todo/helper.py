@@ -41,3 +41,20 @@ def write_data_to_file(data: dict, path: Path):
     """
     with open(path, "w") as f:
         safe_dump(data, f, sort_keys=False)
+
+
+def get_item_from_list(data: dict, key: str, list: str = "todo") -> dict:
+    """Returns the requested item from list if item exists.
+
+    Args:
+        data (dict): data to retrieve item from.
+        key (str): name that identifies item.
+        list (str, optional): The list that the item needs to be retrieved from. Defaults to "todo".
+
+    Returns:
+        dict: _description_
+    """
+    list = data.get(list)
+    for entry in list: 
+        if entry.get("item") == key:
+            return entry
