@@ -3,7 +3,7 @@ from rich.console import Console
 from typer import Typer, Argument, Option
 from typing_extensions import Annotated
 from todo.example import app as example_app
-from todo.helper import create_file_if_not_exists, write_data_to_file, load_data_from_file
+from todo.helper import create_file_if_not_exists, write_data_to_file, load_data_from_file, remove_item_from_list
 
 
 DATA = Path(__file__).parent.resolve() / "data" / "data.yml" 
@@ -73,6 +73,24 @@ def show_list(name: str, data: dict):
     for item in data.get(name):
         done = ['x' if item.get("done") else ' ']
         console.print(f"{done[0]} | {item.get('item')}")
+
+
+@app.command()
+def remove(item: Annotated[str, Argument(..., help="The todo item to remove.")], 
+           list: Annotated[str, Option(..., help="The list it needs to be removed from.")] = "todo"):
+    """Removes an item from the specified list.
+
+    Args:
+        item (str): The todo item to remove.
+        list (str): The list it needs to be removed from. Defaults to "todo".
+    """
+    data = load_data_from_file(DATA)
+    if not data.get(list):
+        console.print(f"List {list} does not exist.")
+        return
+    updated_data = remove_item_from_list(data, item, list)
+    write_data_to_file(updated_data, DATA)
+    console.print(f"Removed {item} from your {list} list.")
 
 
 if __name__ == "__main__":

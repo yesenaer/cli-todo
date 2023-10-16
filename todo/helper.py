@@ -52,9 +52,27 @@ def get_item_from_list(data: dict, key: str, list: str = "todo") -> dict:
         list (str, optional): The list that the item needs to be retrieved from. Defaults to "todo".
 
     Returns:
-        dict: _description_
+        dict: the key's information.
     """
     list = data.get(list)
     for entry in list: 
         if entry.get("item") == key:
             return entry
+
+
+def remove_item_from_list(data: dict, key: str, list: str = "todo") -> dict:
+    """Removes the requested item from list if item exists.
+
+    Args:
+        data (dict): data to remove item from.
+        key (str): name that identifies item.
+        list (str, optional): The list that the item needs to be removed from. Defaults to "todo".
+
+    Returns:
+        dict: data without the key.
+    """
+    list = data.get(list)
+    for index, entry in enumerate(list): 
+        if entry.get("item") == key:
+            list.pop(index)
+    return data

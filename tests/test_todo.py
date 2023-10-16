@@ -71,3 +71,29 @@ def test_show_all(test_file, runner):
         assert output[2] == ""
         assert output[3] == "weapons:"
         assert output[4] == "x | swords"
+
+
+def test_remove(test_file, runner):
+    with patch("todo.todo.DATA", test_file):
+        runner.invoke(app, ["add", "swords"])
+        assert key_in_data(test_file, "item", "swords")
+        assert key_in_data(test_file, "done", False)
+
+        runner.invoke(app, ["remove", "swords"])
+        assert not key_in_data(test_file, "item", "swords")
+        
+        
+def test_remove_list_option(test_file, runner):
+    with patch("todo.todo.DATA", test_file):
+        runner.invoke(app, ["add", "swords", "--list", "weapons"])
+        assert key_in_data(test_file, "item", "swords", "weapons")
+        assert key_in_data(test_file, "done", False, "weapons")
+
+        runner.invoke(app, ["remove", "swords", "--list", "weapons"])
+        assert not key_in_data(test_file, "item", "swords", "weapons")
+
+
+def test_remove_failed(test_file, runner):
+    with patch("todo.todo.DATA", test_file):
+        result = runner.invoke(app, ["remove", "swords"])
+        assert result.stdout.strip() == "List todo does not exist."
