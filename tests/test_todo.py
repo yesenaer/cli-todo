@@ -97,3 +97,30 @@ def test_remove_failed(test_file, runner):
     with patch("todo.todo.DATA", test_file):
         result = runner.invoke(app, ["remove", "swords"])
         assert result.stdout.strip() == "List todo does not exist."
+
+
+def test_complete(test_file, runner):
+    with patch("todo.todo.DATA", test_file):
+        runner.invoke(app, ["add", "swords", "--list", "weapons"])
+        assert key_in_data(test_file, "item", "swords", "weapons")
+        assert key_in_data(test_file, "done", False, "weapons")
+
+        runner.invoke(app, ["complete", "swords", "--list", "weapons"])
+        assert key_in_data(test_file, "item", "swords", "weapons")
+        assert key_in_data(test_file, "done", True, "weapons")
+
+        # should still be done if no undo is used
+        runner.invoke(app, ["complete", "swords", "--list", "weapons"])
+        assert key_in_data(test_file, "item", "swords", "weapons")
+        assert key_in_data(test_file, "done", True, "weapons")
+
+
+def test_complete_undo(test_file, runner):
+    with patch("todo.todo.DATA", test_file):
+        runner.invoke(app, ["add", "swords", "--done"])
+        assert key_in_data(test_file, "item", "swords")
+        assert key_in_data(test_file, "done", True)
+
+        runner.invoke(app, ["complete", "swords", "--undo"])
+        assert key_in_data(test_file, "item", "swords")
+        assert key_in_data(test_file, "done", False)
