@@ -3,7 +3,8 @@ from rich.console import Console
 from typer import Typer, Argument, Option
 from typing_extensions import Annotated
 from todo.example import app as example_app
-from todo.helper import create_file_if_not_exists, write_data_to_file, load_data_from_file, remove_item_from_list
+from todo.helper import (create_file_if_not_exists, write_data_to_file, load_data_from_file, remove_item_from_list, 
+                         update_item_in_list)
 
 
 DATA = Path(__file__).parent.resolve() / "data" / "data.yml" 
@@ -91,6 +92,27 @@ def remove(item: Annotated[str, Argument(..., help="The todo item to remove.")],
     updated_data = remove_item_from_list(data, item, list)
     write_data_to_file(updated_data, DATA)
     console.print(f"Removed {item} from your {list} list.")
+
+
+@app.command()
+def complete(item: Annotated[str, Argument(..., help="The todo item to complete.")], 
+             list: Annotated[str, Option(..., help="The list it needs to be completed on.")] = "todo",
+             undo: Annotated[bool, Option(..., is_flag=True)] = False):
+    """Removes an item from the specified list.
+
+    Args:
+        item (str): The todo item to complete.
+        list (str): The list it needs to be completed on. Defaults to "todo".
+        undo (bool): Undo done status of item. Defaults to False.
+    """
+    data = load_data_from_file(DATA)
+    if not data.get(list):
+        console.print(f"List {list} does not exist.")
+        return
+    done = not undo
+    updated_data = update_item_in_list(data, item, done, list)
+    write_data_to_file(updated_data, DATA)
+    console.print(f"Changed {item} done status on your {list} list.")
 
 
 if __name__ == "__main__":

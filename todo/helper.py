@@ -58,6 +58,25 @@ def get_item_from_list(data: dict, key: str, list: str = "todo") -> dict:
     for entry in list: 
         if entry.get("item") == key:
             return entry
+        
+
+def update_item_in_list(data: dict, key: str, done: bool, list: str = "todo") -> dict:
+    """Updates the requested item in list if item exists.
+
+    Args:
+        data (dict): data to update item in.
+        key (str): name that identifies item.
+        done (bool) the status that is to be updated.
+        list (str, optional): The list that the item needs to be retrieved from. Defaults to "todo".
+
+    Returns:
+        dict: the key's information.
+    """
+    list = data.get(list)
+    for entry in list: 
+        if entry.get("item") == key:
+            entry["done"] = done
+    return data
 
 
 def remove_item_from_list(data: dict, key: str, list: str = "todo") -> dict:
