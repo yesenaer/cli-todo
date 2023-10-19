@@ -2,9 +2,9 @@ from pathlib import Path
 from rich.console import Console
 from typer import Typer, Argument, Option
 from typing_extensions import Annotated
-from todo.example import app as example_app
-from todo.helper import (create_file_if_not_exists, write_data_to_file, load_data_from_file, remove_item_from_list, 
-                         update_item_in_list)
+from example import app as example_app
+from helper import (create_file_if_not_exists, write_data_to_file, load_data_from_file, remove_item_from_list, 
+                    update_item_in_list)
 
 
 DATA = Path(__file__).parent.resolve() / "data" / "data.yml" 

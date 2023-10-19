@@ -1,4 +1,4 @@
-from todo.helper import (create_file_if_not_exists, load_data_from_file, write_data_to_file, get_item_from_list,
+from helper import (create_file_if_not_exists, load_data_from_file, write_data_to_file, get_item_from_list,
 remove_item_from_list, update_item_in_list)
 
 

@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "cli-todo"
-version = "0.0.2"
+version = "0.0.3"
 description = "CLI tool to track to-do lists and items."
 readme = "README.md"
 requires-python = ">=3.10"
@@ -28,12 +28,13 @@ test = [
 repository = "https://github.com/yesenaer/cli-todo"
 
 [project.scripts]
-todo = "todo.todo:app"
-cli-example = "todo.example:app"
-cli-db = "todo.db:app"
+todo = "todo:app"
+cli-example = "example:app"
+cli-db = "db:app"
 
 [options]
 python_requires = ">=3.10"
 
 [tool.pytest.ini_options]
 minversion = 7.0
+pythonpath = "todo"

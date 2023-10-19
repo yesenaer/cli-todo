@@ -2,7 +2,7 @@ from pathlib import Path
 from rich.console import Console
 from typer import Typer, Argument, Option, Exit
 from typing_extensions import Annotated  # to be able to let interpreter know how to treat values 
-from todo.db import app as db_app
+from db import app as db_app
 
 
 console = Console()

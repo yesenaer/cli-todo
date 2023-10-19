@@ -1,4 +1,4 @@
-from todo.db import app
+from db import app
 
 
 def test_create_db(runner):

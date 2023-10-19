@@ -1,5 +1,5 @@
 from typer import Exit
-from todo.example import app, check_if_files_exist
+from example import app, check_if_files_exist
 from pathlib import Path
 from pytest import raises
 

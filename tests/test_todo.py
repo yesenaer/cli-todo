@@ -1,8 +1,8 @@
 from pathlib import Path
 from typing import Union
 from unittest.mock import patch
-from todo.todo import app
-from todo.helper import load_data_from_file
+from todo import app
+from helper import load_data_from_file
 
 
 def key_in_data(location: Path, key: str, value: Union[str, bool] = "item", list: str = "todo") -> bool:
@@ -21,7 +21,7 @@ def test_hello(runner):
 
 
 def test_add(test_file, runner):
-    with patch("todo.todo.DATA", test_file):
+    with patch("todo.DATA", test_file):
         result = runner.invoke(app, ["add", "potions"])
         assert result.exit_code == 0
         assert result.stdout.strip() == "Added potions to your todo list."
@@ -30,7 +30,7 @@ def test_add(test_file, runner):
 
 
 def test_add_list_option(test_file, runner):
-    with patch("todo.todo.DATA", test_file):
+    with patch("todo.DATA", test_file):
         result = runner.invoke(app, ["add", "swords", "--list", "weapons"])
         assert result.exit_code == 0
         assert result.stdout.strip() == "Added swords to your weapons list."
@@ -39,7 +39,7 @@ def test_add_list_option(test_file, runner):
 
 
 def test_add_done_option(test_file, runner):
-    with patch("todo.todo.DATA", test_file):
+    with patch("todo.DATA", test_file):
         result = runner.invoke(app, ["add", "food", "--done"])
         assert result.exit_code == 0
         assert result.stdout.strip() == "Added food to your todo list."
@@ -48,7 +48,7 @@ def test_add_done_option(test_file, runner):
 
 
 def test_show(test_file, runner):
-    with patch("todo.todo.DATA", test_file):
+    with patch("todo.DATA", test_file):
         runner.invoke(app, ["add", "potions"])
         runner.invoke(app, ["add", "swords", "--done"])
         result = runner.invoke(app, ["show"])
@@ -60,7 +60,7 @@ def test_show(test_file, runner):
 
 
 def test_show_all(test_file, runner):
-    with patch("todo.todo.DATA", test_file):
+    with patch("todo.DATA", test_file):
         runner.invoke(app, ["add", "potions"])
         runner.invoke(app, ["add", "swords", "--done", "--list", "weapons"])
         result = runner.invoke(app, ["show", "--all"])
@@ -74,7 +74,7 @@ def test_show_all(test_file, runner):
 
 
 def test_remove(test_file, runner):
-    with patch("todo.todo.DATA", test_file):
+    with patch("todo.DATA", test_file):
         runner.invoke(app, ["add", "swords"])
         assert key_in_data(test_file, "item", "swords")
         assert key_in_data(test_file, "done", False)
@@ -84,7 +84,7 @@ def test_remove(test_file, runner):
         
         
 def test_remove_list_option(test_file, runner):
-    with patch("todo.todo.DATA", test_file):
+    with patch("todo.DATA", test_file):
         runner.invoke(app, ["add", "swords", "--list", "weapons"])
         assert key_in_data(test_file, "item", "swords", "weapons")
         assert key_in_data(test_file, "done", False, "weapons")
@@ -94,13 +94,13 @@ def test_remove_list_option(test_file, runner):
 
 
 def test_remove_failed(test_file, runner):
-    with patch("todo.todo.DATA", test_file):
+    with patch("todo.DATA", test_file):
         result = runner.invoke(app, ["remove", "swords"])
         assert result.stdout.strip() == "List todo does not exist."
 
 
 def test_complete(test_file, runner):
-    with patch("todo.todo.DATA", test_file):
+    with patch("todo.DATA", test_file):
         runner.invoke(app, ["add", "swords", "--list", "weapons"])
         assert key_in_data(test_file, "item", "swords", "weapons")
         assert key_in_data(test_file, "done", False, "weapons")
@@ -116,7 +116,7 @@ def test_complete(test_file, runner):
 
 
 def test_complete_undo(test_file, runner):
-    with patch("todo.todo.DATA", test_file):
+    with patch("todo.DATA", test_file):
         runner.invoke(app, ["add", "swords", "--done"])
         assert key_in_data(test_file, "item", "swords")
         assert key_in_data(test_file, "done", True)
